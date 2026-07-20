@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>이승수 ♥ 김소정 결혼합니다</title>
+<title>We do. — 이승수 & 김소정</title>
 <meta name="description" content="2026. 10. 24 토 · 공군호텔 3층 그랜드볼룸홀">
 
 <!-- ══ 공유 미리보기 (KakaoTalk · OG) ══
@@ -21,6 +21,9 @@
 <meta name="twitter:description" content="2026. 10. 24 토 · 공군호텔 3층 그랜드볼룸홀">
 <meta name="twitter:image" content="https://myrhdwnsla85-debug.github.io/seungsusojeong/og-image.png">
 <meta name="theme-color" content="#C9D3DC">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Qwitcher+Grypen:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://hangeul.pstatic.net/hangeul_static/css/maru-buri.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Event","name":"이승수 ♥ 김소정 결혼식","startDate":"2026-10-24T13:00:00+09:00","location":{"@type":"Place","name":"공군호텔 웨딩홀","address":"서울특별시 영등포구 여의대방로 259"}}
@@ -163,21 +166,20 @@ body.edit .in-item::after{content:"";position:absolute;inset:0;border:1.5px dash
   display:block;
 }
 .intro-date{
-  margin-top:6px;margin-left:2px;
+  margin-top:6px;margin-left:0;
   font-family:var(--en);font-style:italic;font-size:19px;
   letter-spacing:.12em;color:var(--text);
-  display:block;
+  display:block;text-align:center;width:100%;
 }
 .intro-wi{
-  margin-top:46px;
-  font-size:11px;font-weight:500;letter-spacing:.5em;
-  text-transform:uppercase;color:var(--sub);
+  display:none !important;
 }
 .intro-names{
-  margin-top:14px;display:flex;align-items:center;gap:12px;
-  font-size:24px;font-weight:400;letter-spacing:.16em;color:var(--text);
+  margin-top:20px;display:flex;flex-direction:column;align-items:stretch;gap:0;
+  font-size:24px;font-weight:400;letter-spacing:0;color:var(--text);
+  width:min(70vw,260px);
 }
-.intro-names .amp{font-style:normal;font-size:16px;color:var(--sub);}
+.intro-names .amp{font-style:normal;font-size:inherit;color:var(--sub);display:block;text-align:center;}
 
 /* ============ 2 · 초대합니다 ============ */
 .invite{background:var(--white);}
@@ -407,7 +409,7 @@ section{padding:120px 30px;}
 .intro::after{display:none;}
 .in-item{background:var(--paper-lo);}
 .in-item .plus{color:var(--sub);}
-.intro-hand{font-family:var(--hand);font-size:58px;transform:none;line-height:1;}
+.intro-hand{font-family:var(--hand);font-size:78px;transform:none;line-height:1;}
 .intro-date{font-family:var(--en);color:var(--ink);}
 
 /* ── invite: bare text on paper ── */
@@ -533,6 +535,7 @@ body.gated{overflow:hidden;}
 }
 .env-card b{font-family:var(--sans);font-weight:500;font-size:14px;letter-spacing:.3em;text-indent:.3em;color:var(--ink);}
 .env-card i{font-family:var(--sans);font-style:normal;font-size:12px;letter-spacing:.24em;color:var(--sub);}
+
 /* 봉투 앞면 — 업로드된 실제 이미지 사용. 플랩/몸체가 같은 이미지를 공유해 닫힌 상태는 원본 그대로 */
 .env-pocket, .env-flap{
   background-image:var(--env-img);
@@ -591,7 +594,7 @@ body::before{
 section{
   padding:var(--rhythm-section) 32px;
 }
-section{ padding-bottom:30px; } /* uniform chapter gap */
+section{ padding-bottom:30px; }
 
 /* ---------- 1. Section Title Typography ---------- */
 /* eyebrow = 챕터 캡션(작고 트래킹 넓은 라벨) */
@@ -736,8 +739,15 @@ body,button,input,textarea,select{
   font-family:inherit;
 }
 .eyebrow{font-family:var(--en) !important;}
-.ending .scr{font-family:'Homemade Apple','Nanum Pen Script',cursive !important;}
-.intro-hand{font-family:'Homemade Apple','Nanum Pen Script',cursive !important;}
+.ending .scr{font-family:'Qwitcher Grypen',cursive !important;}
+
+.eyebrow{font-family:var(--en) !important;}
+.ending .scr{font-family:'Qwitcher Grypen',cursive !important;}
+.intro-hand{font-family:'Qwitcher Grypen',cursive !important;}
+.intro-date{font-family:'Qwitcher Grypen',cursive !important;font-size:min(8vw,34px) !important;line-height:1.1;margin-top:8px;white-space:nowrap;}
+.intro-names{font-family:'Qwitcher Grypen',cursive !important;font-size:70px !important;line-height:0.9;}
+.intro-names [data-edit='t1']{display:block;text-align:left;}
+.intro-names [data-edit='t2']{display:block;text-align:right;}
 
 
 /* ── 공유 버튼 ── */
@@ -772,10 +782,10 @@ body,button,input,textarea,select{
       </div>
       <div class="intro-txt">
         <span class="intro-hand fx" data-edit="t23">We Do.</span>
-        <span class="intro-date fx fx-d2" data-edit="t24">2026. 10. 24 SAT</span>
+        <span class="intro-date fx fx-d2" data-edit="t24">2026. 10. 24 Sat</span>
         <p class="intro-wi fx fx-d2" data-edit="t25">Wedding Invitation</p>
         <h1 class="intro-names fx fx-d3">
-          <span data-edit="t1">이승수</span><i class="amp" aria-hidden="true">&amp;</i><span data-edit="t2">김소정</span>
+          <span data-edit="t1">Lee Seungsu</span><i class="amp" aria-hidden="true">&amp;</i><span data-edit="t2">Kim Sojeong</span>
         </h1>
       </div>
     </div>
@@ -881,7 +891,7 @@ body,button,input,textarea,select{
 
   <!-- ═══ CLOSING ═══ -->
   <section class="ending" aria-label="맺음">
-    <p class="scr fx" data-edit="t51">with love,</p>
+    <p class="scr fx" data-edit="t51">We're getting married!</p>
     <p class="nm fx fx-d2" data-edit="t30">승수 &amp; 소정</p>
     <div class="share-row fx">
       <button class="btn share-web" id="btnShare" type="button">공유하기</button>
