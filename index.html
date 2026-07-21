@@ -61,7 +61,7 @@ button, a.btn{min-height:44px;}
 
 .app{
   max-width:430px;margin:0 auto;background:var(--bg);
-  min-height:100dvh;position:relative;overflow-x:hidden;
+  min-height:100vh;min-height:100svh;position:relative;overflow-x:hidden;
   box-shadow:0 0 60px rgba(0,0,0,.10);
 }
 @media (min-width:768px){ .app{max-width:480px;} }
@@ -126,7 +126,7 @@ body.edit .pslot.filled .swap-btn{display:flex;}
 
 /* ============ 0 · INTRO ============ */
 .intro{
-  min-height:100dvh;background:#F5EFE4;position:relative;
+  min-height:100vh;min-height:100svh;background:#F5EFE4;position:relative;
   display:flex;flex-direction:column;align-items:center;
   justify-content:center;padding:0 24px;
   text-align:left;
@@ -193,7 +193,7 @@ body.edit .in-item::after{content:"";position:absolute;inset:0;border:1.5px dash
 
 /* ============ 4 · GALLERY — editorial showcase ============ */
 .showcase{
-  position:relative;min-height:100dvh;padding:0 0 max(30px, env(safe-area-inset-bottom));overflow:hidden;
+  position:relative;min-height:100vh;min-height:100svh;padding:0 0 max(30px, env(safe-area-inset-bottom));overflow:hidden;
   background:#DDDAD4;
   display:flex;align-items:flex-end;justify-content:center;
 }
@@ -201,32 +201,42 @@ body.edit .in-item::after{content:"";position:absolute;inset:0;border:1.5px dash
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   opacity:0;transform:scale(1.14);
   transition:opacity 1.1s ease, transform 1.8s cubic-bezier(.22,.61,.36,1);
-  will-change:opacity,transform;
 }
 .sc-bg img.show{opacity:1;transform:scale(1);}
 /* 5 x 2 thumbnail grid */
 .sc-gallery-wrap{
-  position:relative;z-index:5;display:flex;align-items:center;justify-content:center;gap:10px;
+  position:relative;z-index:5;display:flex;align-items:center;justify-content:center;
   width:100%;
 }
 .sc-nav{
-  flex:none;width:36px;height:36px;border-radius:50%;
+  position:absolute;top:50%;z-index:6;
+  transform:translateY(-50%) scale(1);
+  width:44px;height:44px;flex:none;
+  border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  border:1px solid rgba(255,255,255,.5);background:rgba(0,0,0,.25);color:#fff;
-  cursor:pointer;transition:background .3s,opacity .3s;padding:0;
+  border:1px solid rgba(255,255,255,.5);background:rgba(0,0,0,.22);color:#fff;
+  cursor:pointer;padding:0;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  transition:opacity .25s ease, transform .15s ease;
 }
-.sc-nav svg{width:16px;height:16px;display:block;}
-.sc-nav:hover{background:rgba(0,0,0,.4);}
-.sc-nav[disabled]{opacity:.35;cursor:default;pointer-events:none;}
+.sc-prev{left:clamp(0px,2vw,10px);}
+.sc-next{right:clamp(0px,2vw,10px);}
+.sc-nav svg{width:18px;height:18px;display:block;margin:auto;}
+.sc-nav:active{transform:translateY(-50%) scale(.9);opacity:.75;}
+@media (hover:hover) and (pointer:fine){
+  .sc-nav:hover{opacity:.85;}
+}
+.sc-nav[disabled]{opacity:.3;pointer-events:none;}
 .sc-grid{
-  position:relative;
+  position:relative;contain:layout style paint;
   display:grid;grid-template-columns:repeat(5,1fr);gap:7px;
   width:min(88%,364px);
 }
 .sc-item{
   position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:0;
-  background:#CBC7C0;padding:0;cursor:pointer;
+  background:#CBC7C0;padding:0;cursor:pointer;contain:layout paint;
   outline:1.5px solid transparent;
+  -webkit-tap-highlight-color:transparent;
   transition:transform .5s cubic-bezier(.22,.61,.36,1), box-shadow .5s, outline-color .3s;
 }
 .sc-item .pimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;}
@@ -236,7 +246,9 @@ body.edit .in-item::after{content:"";position:absolute;inset:0;border:1.5px dash
   color:#98928A;font-size:17px;font-weight:300;
 }
 .sc-item.filled .plus{display:none;}
-.sc-item:hover{transform:scale(1.06);z-index:6;}
+@media (hover:hover) and (pointer:fine){
+  .sc-item:hover{transform:scale(1.06);z-index:6;}
+}
 .sc-item.sel{
   transform:scale(1.14);z-index:7;outline-color:var(--accent);
   box-shadow:0 12px 28px rgba(0,0,0,.28);
@@ -449,7 +461,9 @@ section{padding:120px 30px;}
 .sc-item{background:var(--paper-lo);}
 .sc-item .plus{color:var(--sub);}
 .sc-item.sel{outline-color:var(--ink);box-shadow:none;}
-.sc-item:hover{transform:scale(1.04);}
+@media (hover:hover) and (pointer:fine){
+  .sc-item:hover{transform:scale(1.04);}
+}
 
 
 /* ── Save the Date calendar (lovable ch.04) ── */
@@ -796,6 +810,10 @@ body,button,input,textarea,select{
 .gift .acc-head .who{
   font-family:'MaruBuri','Noto Serif KR',serif !important;
 }
+/* ── 모바일 스크롤 성능: 고정 배경(background-attachment:fixed)은
+   iOS Safari에서 스크롤할 때마다 리페인트를 유발해 버벅임의 주요 원인이 되므로
+   스크롤 시 다시 그리지 않도록 scroll로 고정 ── */
+body{ background-attachment:scroll !important; }
 
 </style>
 </head>
@@ -1099,12 +1117,22 @@ for(var i=1;i<=20;i++){
 var scA=$('#scBgA'), scB=$('#scBgB'), scFront=null;
 function setBg(src){
   var back = (scFront===scA) ? scB : scA;
+  var prevFront = scFront;
+  back.style.willChange = 'opacity, transform';
+  if(prevFront) prevFront.style.willChange = 'opacity, transform';
   back.src = src;
   requestAnimationFrame(function(){
     requestAnimationFrame(function(){
       back.classList.add('show');
-      if(scFront) scFront.classList.remove('show');
+      if(prevFront) prevFront.classList.remove('show');
       scFront = back;
+      var onDone = function(){
+        back.style.willChange = 'auto';
+        if(prevFront) prevFront.style.willChange = 'auto';
+        back.removeEventListener('transitionend', onDone);
+      };
+      back.addEventListener('transitionend', onDone);
+      setTimeout(onDone, 2000); // safety fallback if transitionend doesn't fire
     });
   });
 }
