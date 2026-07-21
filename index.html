@@ -267,6 +267,11 @@ body.edit .sc-item::after{
 .map-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
 .map-btns .btn{width:100%;border-radius:0;padding:13px 6px;}
 .tcards{display:flex;flex-direction:column;gap:10px;margin-top:28px;}
+/* way-acc: 교통 아코디언 */
+.way-acc .acc-inner{ border-top:1px solid var(--line) !important; }
+.way-acc .acc-body{ max-height:0; }
+.way-acc.open .acc-body{ max-height:320px; }
+.way-acc-text{ font-size:13px; color:var(--sub); line-height:1.9; padding:4px 0; }
 .tcard{
   background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);
   padding:20px 20px;display:flex;gap:16px;align-items:flex-start;
@@ -860,18 +865,50 @@ body,button,input,textarea,select{
       <a class="btn" id="mapTmap" href="#">티맵</a>
     </div>
 
-    <div class="tcards">
-      <div class="tcard fx"><span class="ic" aria-hidden="true">지하철</span>
-        <div><h3 data-edit="t31">지하철</h3><p data-edit="t14">1호선 대방역 5번 출구 도보 5분<br>신림선 대방역 6번 출구 도보 5분<br>7호선 보라매역 7번 출구 도보 15분<br>신림선 서울지방병청무역 2번 출구 도보 9분</p></div>
+    <div class="tcards" id="wayAccWrap">
+      <div class="acc way-acc fx in">
+        <button class="acc-head" type="button" aria-expanded="false">
+          <span class="who">지하철</span>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+        <div class="acc-body">
+          <div class="acc-inner">
+            <p class="way-acc-text" data-edit="t14">1호선 대방역 5번 출구 도보 5분<br>신림선 대방역 6번 출구 도보 5분<br>7호선 보라매역 7번 출구 도보 15분<br>신림선 서울지방병무청역 2번 출구 도보 9분</p>
+          </div>
+        </div>
       </div>
-      <div class="tcard fx"><span class="ic" aria-hidden="true">버스</span>
-        <div><h3 data-edit="t32">버스</h3><p data-edit="t15">공군호텔 정류장 하차 — 간선 150 · 461 · 505 · 753<br>지선 5331 · 5534 · 5623 · 5633 · 6514 · 6713<br>광선 M5609<br>마을 영등포07</p></div>
+      <div class="acc way-acc fx in">
+        <button class="acc-head" type="button" aria-expanded="false">
+          <span class="who">버스</span>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+        <div class="acc-body">
+          <div class="acc-inner">
+            <p class="way-acc-text" data-edit="t15">공군호텔 정류장 하차 — 간선 150 · 461 · 505 · 753<br>지선 5331 · 5534 · 5623 · 5633 · 6514 · 6713<br>광선 M5609<br>마을 영등포07</p>
+          </div>
+        </div>
       </div>
-      <div class="tcard fx"><span class="ic" aria-hidden="true">전세버스</span>
-        <div><h3 data-edit="t33">전세버스</h3><p data-edit="t16">일시 10월 24일 토요일 오후 12시<br>장소 경북 경산시 와촌면 금송로 416 와촌면복지회관</p></div>
+      <div class="acc way-acc fx in">
+        <button class="acc-head" type="button" aria-expanded="false">
+          <span class="who">전세버스</span>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+        <div class="acc-body">
+          <div class="acc-inner">
+            <p class="way-acc-text" data-edit="t16">일시 10월 24일 토요일 오후 12시<br>장소 경북 경산시 와촌면 금송로 416 와촌면복지회관</p>
+          </div>
+        </div>
       </div>
-      <div class="tcard fx"><span class="ic" aria-hidden="true">주차</span>
-        <div><h3 data-edit="t34">주차</h3><p data-edit="t17">공군호텔 내 지하주차장 · 3시간 무료<br>주차 등록 1,3층 주차 등록기 이용<br>보조 주차장은 주차 등록 없이 출차 가능</p></div>
+      <div class="acc way-acc fx in">
+        <button class="acc-head" type="button" aria-expanded="false">
+          <span class="who">주차</span>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+        <div class="acc-body">
+          <div class="acc-inner">
+            <p class="way-acc-text" data-edit="t17">공군호텔 내 지하주차장 · 3시간 무료<br>주차 등록 1,3층 주차 등록기 이용<br>보조 주차장은 주차 등록 없이 출차 가능</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1056,6 +1093,15 @@ function renderAccs(){
   bindAccEdit();
 }
 renderAccs();
+
+/* ---------- 교통 아코디언 ---------- */
+document.getElementById('wayAccWrap').addEventListener('click', function(e){
+  var head = e.target.closest('.acc-head');
+  if(!head) return;
+  var acc = head.parentElement;
+  var open = acc.classList.toggle('open');
+  head.setAttribute('aria-expanded', open);
+});
 
 accWrap.addEventListener('click', function(e){
   var head = e.target.closest('.acc-head');
