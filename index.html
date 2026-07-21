@@ -205,8 +205,21 @@ body.edit .in-item::after{content:"";position:absolute;inset:0;border:1.5px dash
 }
 .sc-bg img.show{opacity:1;transform:scale(1);}
 /* 5 x 2 thumbnail grid */
+.sc-gallery-wrap{
+  position:relative;z-index:5;display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;
+}
+.sc-nav{
+  flex:none;width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(255,255,255,.5);background:rgba(0,0,0,.25);color:#fff;
+  cursor:pointer;transition:background .3s,opacity .3s;padding:0;
+}
+.sc-nav svg{width:16px;height:16px;display:block;}
+.sc-nav:hover{background:rgba(0,0,0,.4);}
+.sc-nav[disabled]{opacity:.35;cursor:default;pointer-events:none;}
 .sc-grid{
-  position:relative;z-index:5;
+  position:relative;
   display:grid;grid-template-columns:repeat(5,1fr);gap:7px;
   width:min(88%,364px);
 }
@@ -771,6 +784,18 @@ body,button,input,textarea,select{
   margin-top:44px;
   display:flex;justify-content:center;
 }
+/* ── 폰트 통일: 마루부리 (이름/지도버튼/교통라벨/마음전할곳) ── */
+.invite .names-row,
+.invite .names-row b,
+.map-btns .btn,
+.way-acc .who,
+.gift .eyebrow,
+.gift .sec-title,
+.gift .serif-copy,
+.gift #accWrap,
+.gift .acc-head .who{
+  font-family:'MaruBuri','Noto Serif KR',serif !important;
+}
 
 </style>
 </head>
@@ -868,16 +893,6 @@ body,button,input,textarea,select{
     </div>
   </section>
 
-  <!-- ═══ 4 · GALLERY — editorial showcase ═══ -->
-  <section class="showcase" aria-labelledby="h-gallery">
-    <div class="sc-bg" aria-hidden="true">
-      <img id="scBgA" alt="">
-      <img id="scBgB" alt="">
-    </div>
-
-    <h2 class="sr" id="h-gallery">갤러리</h2>
-    <div class="sc-grid" id="scGrid"><!-- JS renders 10 tiles --></div>
-  </section>
 
   <!-- data preserved for JS (copyAddr / addCal) -->
   <span data-edit="t12" style="display:none">공군호텔</span>
@@ -945,6 +960,24 @@ body,button,input,textarea,select{
           </div>
         </div>
       </div>
+    </div>
+  </section>
+  <!-- ═══ 4 · GALLERY — editorial showcase ═══ -->
+  <section class="showcase" aria-labelledby="h-gallery">
+    <div class="sc-bg" aria-hidden="true">
+      <img id="scBgA" alt="">
+      <img id="scBgB" alt="">
+    </div>
+
+    <h2 class="sr" id="h-gallery">갤러리</h2>
+    <div class="sc-gallery-wrap fx">
+      <button class="sc-nav sc-prev" type="button" aria-label="이전 사진">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="sc-grid" id="scGrid"><!-- JS renders 20 tiles --></div>
+      <button class="sc-nav sc-next" type="button" aria-label="다음 사진">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
   </section>
 
@@ -1026,9 +1059,9 @@ var ACC_DEFAULT = [
 ];
 var accounts = JSON.parse(JSON.stringify(ACC_DEFAULT));
 
-/* ---------- render showcase tiles (10) & background swap ---------- */
+/* ---------- render showcase tiles (20) & background swap ---------- */
 var scGrid = $('#scGrid');
-for(var i=1;i<=10;i++){
+for(var i=1;i<=20;i++){
   var b = document.createElement('button');
   b.type = 'button';
   b.className = 'sc-item';
@@ -1037,6 +1070,32 @@ for(var i=1;i<=10;i++){
   b.innerHTML = '<img class="pimg" alt=""><span class="plus" aria-hidden="true">+</span>';
   scGrid.appendChild(b);
 }
+
+/* ---------- gallery pager: 2 rows (10 tiles) per page ---------- */
+(function(){
+  var items = $$('.sc-item', scGrid);
+  var PER_PAGE = 10;
+  var pageCount = Math.ceil(items.length / PER_PAGE);
+  var scPage = 0;
+  var prevBtn = $('.sc-prev'), nextBtn = $('.sc-next');
+  function renderScPage(){
+    items.forEach(function(el, idx){
+      el.style.display = (idx >= scPage*PER_PAGE && idx < (scPage+1)*PER_PAGE) ? '' : 'none';
+    });
+    if(prevBtn) prevBtn.disabled = (pageCount <= 1);
+    if(nextBtn) nextBtn.disabled = (pageCount <= 1);
+  }
+  if(prevBtn) prevBtn.addEventListener('click', function(){
+    scPage = (scPage - 1 + pageCount) % pageCount;
+    renderScPage();
+  });
+  if(nextBtn) nextBtn.addEventListener('click', function(){
+    scPage = (scPage + 1) % pageCount;
+    renderScPage();
+  });
+  renderScPage();
+})();
+
 var scA=$('#scBgA'), scB=$('#scBgB'), scFront=null;
 function setBg(src){
   var back = (scFront===scA) ? scB : scA;
@@ -1301,7 +1360,7 @@ $('#accentPick').addEventListener('input', function(e){
 
 /* ---------- restore saved state ---------- */
 var SLOTS = ['mapimg','intro1','intro2','intro3','intro4'];
-for(var g=1;g<=10;g++) SLOTS.push('g'+g);
+for(var g=1;g<=20;g++) SLOTS.push('g'+g);
 function restore(){
   var jobs = [];
   jobs.push(store.get('wd:texts').then(function(v){
