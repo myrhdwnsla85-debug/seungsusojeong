@@ -815,6 +815,44 @@ body,button,input,textarea,select{
    스크롤 시 다시 그리지 않도록 scroll로 고정 ── */
 body{ background-attachment:scroll !important; }
 
+/* ════════════════════════════════════════════════════════
+   ENVELOPE OPEN — 실측 사선 + 레퍼런스 개봉 모션 · CSS ONLY
+   사선(모바일 cover 크롭 기준 실측): (85%,0)·(98%,100%) → 꼭짓점(-5.4%,46.8%)
+   개봉 시: 왼쪽 조각은 봉투 열리듯 젖혀지고(3D 회전), 오른쪽 조각은 아래로 내려간다.
+   HTML 구조 / JS 변경 없음.
+════════════════════════════════════════════════════════ */
+
+/* 카드 등장 장면 자체 제거 */
+.env-card{ display:none !important; }
+
+/* 오른쪽 대부분을 차지하는 큰 조각 — 화면 오른쪽으로 슬라이드되며 사라짐
+   꼭짓점(APEX)은 실측 세로 접힘선 위치(x≈45~48%)를 그대로 사용 — 화면 안쪽 점이라
+   작은 삼각형과 크기 대비가 자연스럽다. 필요하면 46% 값만 조절해 크기 비율 변경 가능. */
+/* 사선 기울기를 넓히기 위해 기준선을 캔버스 위/아래로 확장(-80%~180%) — 꼭짓점(78%,50%)은 그대로 유지 */
+.env-pocket{
+  clip-path:polygon(0 -80%, 100% -80%, 100% 180%, 0 180%, 78% 50%);
+  transform:translateX(0);
+  transition:transform 1.3s cubic-bezier(.77,0,.18,1) .5s;
+  will-change:transform;
+}
+/* 왼쪽 작은 삼각형(플랩) — 왼쪽 모서리를 축으로 3D 회전하며 열림 */
+.env-flap{
+  clip-path:polygon(0 -80%, 0 180%, 78% 50%);
+  transform-origin:left center;
+  transform:rotateY(0);
+  filter:drop-shadow(1px 0 0 rgba(42,49,56,.14));
+  transition:transform 1.3s cubic-bezier(.5,0,.15,1), opacity .45s ease .85s !important;
+  will-change:opacity,transform;
+}
+
+/* 개봉: 왼쪽 작은 삼각형(플랩)은 왼쪽 축으로 열리고, 오른쪽 큰 조각(포켓)은 오른쪽으로 슬라이드되며 사라짐 */
+.gate.opening{transform:none;}
+.gate.opening .env-flap{transform:rotateY(-105deg); opacity:0;}
+.gate.opening .env-pocket{transform:translateX(104%);}
+
+/* 퇴장: 좌측 슬라이드 대신 페이드아웃 */
+.gate.away{transform:none; opacity:0; transition:opacity 1.2s ease;}
+
 </style>
 </head>
 <body>
