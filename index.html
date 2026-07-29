@@ -1386,9 +1386,35 @@ function syncMapLinks(){
   var addr = encodeURIComponent($('#addrText').textContent.trim());
   $('#mapNaver').href = 'https://map.naver.com/p/search/'+addr;
   $('#mapKakao').href = 'https://map.kakao.com/link/search/'+addr;
+  /* 티맵은 앱 스킴(tmap://)만 있으면 앱이 없는 기기(PC 크롬 등)에서는
+     클릭해도 아무 반응이 없다. 앱 스킴 시도 후 일정 시간 내 페이지 전환이
+     없으면 티맵 웹/설치 페이지로 폴백한다. */
   $('#mapTmap').href  = 'tmap://search?name='+addr;
+  $('#mapTmap').dataset.tmapScheme = 'tmap://search?name='+addr;
+  $('#mapTmap').dataset.tmapWeb = 'https://tmap.life/search?name='+addr;
 }
 syncMapLinks();
+
+/* 티맵 클릭 처리: 앱 스킴 시도 → 무반응 시 웹으로 폴백 */
+$('#mapTmap').addEventListener('click', function(e){
+  e.preventDefault();
+  var btn = this;
+  var scheme = btn.dataset.tmapScheme;
+  var webFallback = btn.dataset.tmapWeb;
+  var fellBack = false;
+  var timer = setTimeout(function(){
+    if(document.hidden) return; /* 앱으로 전환됨 */
+    fellBack = true;
+    window.location.href = webFallback;
+  }, 1200);
+  document.addEventListener('visibilitychange', function onVis(){
+    if(document.hidden){
+      clearTimeout(timer);
+      document.removeEventListener('visibilitychange', onVis);
+    }
+  });
+  window.location.href = scheme;
+});
 
 /* ---------- edit mode ---------- */
 var fab = $('#fab');
@@ -1480,7 +1506,7 @@ function initFx(){
 /* ---------- envelope gate ---------- */
 document.body.classList.add('gated');
 var gate=$('#gate');
-$('#envBtn').addEventListener('click', function(){
+function openGate(){
   if(gate.classList.contains('opening')) return;
   gate.classList.add('opening');
   var t1 = reduced? 50 : 2600;
@@ -1490,7 +1516,10 @@ $('#envBtn').addEventListener('click', function(){
     document.body.classList.remove('gated');
     setTimeout(function(){ gate.style.display='none'; }, t2);
   }, t1);
-});
+}
+$('#envBtn').addEventListener('click', openGate);
+/* 클릭 없이 자동으로 열림 — 페이지 로드 후 약간의 딜레이를 두고 시작 */
+setTimeout(openGate, reduced ? 200 : 600);
 
 restore().then(function(){
   var first = $('.sc-item.filled');
